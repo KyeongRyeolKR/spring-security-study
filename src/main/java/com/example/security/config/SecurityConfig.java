@@ -18,7 +18,7 @@ public class SecurityConfig {
                 // 인가 설정
                 .authorizeHttpRequests(
                         (auth) -> auth
-                                .requestMatchers("/", "/login").permitAll() // /, /login 경로는 모두에게 허용
+                                .requestMatchers("/", "/login", "/loginProc", "/join", "/joinProc").permitAll() // /, /login 경로는 모두에게 허용
                                 .requestMatchers("/admin").hasRole("ADMIN") // /admin 경로는 ADMIN만 허용
                                 .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER") // /my/** 경로는 ADMIN, USER만 허용
                                 .anyRequest().authenticated() // 나머지 요청은 로그인한 사용자만 허용
