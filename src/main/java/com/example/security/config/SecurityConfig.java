@@ -34,11 +34,19 @@ public class SecurityConfig {
                 );
 
         http
-                // 사이트 위조/변조 방지(CSRF) 설정
-                // 개발환경에서는 CSRF 토큰이 없어도 동작이 가능하도록 설정을 끔
-                .csrf(
-                        AbstractHttpConfigurer::disable
+                // 로그아웃 설정
+                .logout(
+                        (auth) -> auth
+                                .logoutUrl("/logout")
+                                .logoutSuccessUrl("/")
                 );
+
+        // 사이트 위조/변조 방지(CSRF) 설정
+        // 개발환경에서는 CSRF 토큰이 없어도 동작이 가능하도록 설정을 끔
+        // 해당 설정을 하지 않으면, 기본 값 -> enable
+        // Restful API 서버의 경우, 세션이 "STATELESS" 하기 때문에 CSRF 설정을 disable해도 문제가 없다!
+//        http.csrf(AbstractHttpConfigurer::disable);
+
 
         http
                 // 다중 로그인 설정
