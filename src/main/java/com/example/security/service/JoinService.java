@@ -22,7 +22,7 @@ public class JoinService {
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setPassword(passwordEncoder.encode(dto.getPassword())); // 비밀번호는 암호화 필수! -> BCrypt
-        user.setRole("ROLE_USER");
+        user.setRole("ROLE_ADMIN"); // 임시
 
         userRepository.save(user);
     }
