@@ -15,7 +15,10 @@ public class JoinService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public void joinProcess(JoinDto dto) {
-        // TODO : 검증 로직 추가
+        if(userRepository.existsByUsername(dto.getUsername())) {
+            return;
+        }
+
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setPassword(passwordEncoder.encode(dto.getPassword())); // 비밀번호는 암호화 필수! -> BCrypt
