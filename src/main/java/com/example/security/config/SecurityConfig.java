@@ -2,6 +2,8 @@ package com.example.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,8 +21,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (auth) -> auth
                                 .requestMatchers("/", "/login", "/loginProc", "/join", "/joinProc").permitAll() // /, /login 경로는 모두에게 허용
-                                .requestMatchers("/admin").hasRole("ADMIN") // /admin 경로는 ADMIN만 허용
-                                .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER") // /my/** 경로는 ADMIN, USER만 허용
+                                .requestMatchers("/admin").hasAnyRole("ADMIN") // /admin 경로는 ADMIN만 허용
+                                .requestMatchers("/my/**").hasAnyRole("USER") // /my/** 경로는 ADMIN, USER만 허용
                                 .anyRequest().authenticated() // 나머지 요청은 로그인한 사용자만 허용
                 );
 
@@ -77,5 +79,16 @@ public class SecurityConfig {
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    /*
+    권한 계층 설정
+    requestMatchers() 설정을 할 때, hasAnyRole()에 어떤 권한을 넣으면 그 권한 이상은 모두 가능하다.
+     */
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
+        hierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER");
+        return hierarchy;
     }
 }
