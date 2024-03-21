@@ -10,3 +10,8 @@ spring:
       ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+server:
+  servlet:
+    session:
+      timeout: 1800 # 세션 타임아웃(로그아웃) 시간 설정 -> 분 단위(30m)로도 설정 가능

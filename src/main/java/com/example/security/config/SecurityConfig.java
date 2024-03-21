@@ -40,6 +40,26 @@ public class SecurityConfig {
                         AbstractHttpConfigurer::disable
                 );
 
+        http
+                // 다중 로그인 설정
+                .sessionManagement(
+                        (auth) -> auth
+                                .maximumSessions(1) // 하나의 아이디에 대한 다중 로그인 허용 개수
+                                .maxSessionsPreventsLogin(true) // 다중 로그인 개수를 초과했을 경우 처리 방법
+                                // true -> 초과 시, 새 로그인 차단
+                                // false -> 초과 시, 기존 세션 하나 삭제 후 로그인 성공
+                );
+
+        http
+                // 세션 고정 공격을 방지하기 위한 보호 설정
+                .sessionManagement(
+                        (auth) -> auth
+                                .sessionFixation().changeSessionId()
+                                // sessionFixation().none() -> 로그인 시, 세션 정보 변경 안함
+                                // sessionFixation().newSession() -> 로그인 시, 세션 새로 생성
+                                // sessionFixation().changeSessionId() -> 로그인 시, 동일한 세션에 대한 id 변경
+                );
+
         return http.build();
     }
 
